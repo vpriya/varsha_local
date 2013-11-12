@@ -1,0 +1,471 @@
+If (False)
+  //================================================================================
+  //
+  //Project Method: UTL_FRM_I824_2013_11 (->HTML)
+  //Copyright 2013 LawLogix Inc.
+  //Written by: Varsha Priya
+  //Modes: Poke, Post
+  // 
+  //B-01194 VP 11/08/2013 ----- upgrade -----
+  //
+  //================================================================================
+End if 
+  //
+  //---------- Variable Declarations ----------
+  //
+C_POINTER($1)
+C_TEXT($Block;$Addendum;$tComName;$tComTaxID)
+C_LONGINT($FNL_Key_B;$R;$M;$T;$i)
+C_LONGINT($PET_KEY;$ADD_Key;$ADD_Key_M;$PHN_Key;$I94_Key)
+C_BOOLEAN($Company)
+C_STRING(20;$Add_Type;$Filer)
+C_STRING(80;$addCurrStreet;$Find;$Find2;$Find3)
+C_TEXT($tAddType)//B-01194 VP 11/08/2013
+C_LONGINT($PRC_Petitioner_Key;$PRC_Com_Petitioner_Key;$PRC_Com_Pet_Add_Key;$PRC_Company_Signor_Key;$PRC_Signor_Key;$ADD_KEY;$ADD_FK_Table;$ADD_FK_Key;$ADD_Apt_St_Flr) //B-01194 VP 11/08/2013
+C_BOOLEAN($bHas_Pet_Mailing_ADD_Record;$bHas_Pet_ADD_Record)  //B-01194 VP 11/08/2013
+C_LONGINT($iPopulatePostalProvince)//B-01194 VP 11/08/2013
+
+  //
+  //QUERY([I_824];[I_824]Key=[FOR]FK_Key)
+If ([I_824]Key#[FOR]FK_Key)
+SQL_LoadRecord (->[I_824];String([FOR]FK_Key))
+End if 
+$FNL_Key_B:=[I_824]Subject
+$Filer:=[I_824]Filer
+$Addendum:=""
+//
+  //B-01194 VP 11/08/2013 --------- Start ----------
+pgSQL_Build_Select_Ptr (0;"prc")
+pgSQL_Build_Select_Ptr (1;"prc_petitioner_key";->$PRC_Petitioner_Key)
+pgSQL_Build_Select_Ptr (1;"prc_com_petitioner_key";->$PRC_Com_Petitioner_Key)
+pgSQL_Build_Select_Ptr (1;"prc_com_pet_add_key";->$PRC_Com_Pet_Add_Key)
+pgSQL_Build_Select_Ptr (1;"prc_company_signor_key";->$PRC_Company_Signor_Key)
+pgSQL_Build_Select_Ptr (1;"prc_signor_key";->$PRC_Signor_Key)
+pgSQL_Build_Select_Ptr (2;"prc_key = "+String([FOR]PRC_Key))
+  //B-01194 VP 11/08/2013 --------- End ----------
+//
+Case of 
+: ($Filer="Company")
+4DW_Insert_Tag ($1;"[*COM_KEY_P*]";String([FOR]PET_COM_Key))
+4DW_Insert_Tag ($1;"[*ADD_KEY_P*]";String([FOR]PET_ADD_Key))
+  //Indiv Pet cannot be created from the form since Name field is Company Signer
+4DW_Insert_Tag ($1;"[*FNL_KEY_P*]";"0")
+  //
+//B-01194 VP 11/08/2013 --------- Start ----------
+pgSQL_Query ("select count(1) > 0 from add where add_key = "+String([FOR]PET_MailingADD_Key);1;->$bHas_Pet_Mailing_ADD_Record)
+pgSQL_Query ("select count(1) > 0 from add where add_key = "+String([FOR]PET_ADD_Key);1;->$bHas_Pet_ADD_Record)
+
+  //====================== Primary/Current Address ====================
+If (Not($bHas_Pet_ADD_Record))
+$ADD_Key:=-1
+$ADD_FK_Table:=61
+$ADD_FK_Key:=[FOR]Key
+$tAddType:="Primary Address"
+$ADD_Apt_St_Flr:=0
+$iPopulatePostalProvince:=0
+Else 
+pgSQL_Build_Select_Ptr (0;"add")
+pgSQL_Build_Select_Ptr (1;"add_key";->$ADD_Key)
+pgSQL_Build_Select_Ptr (1;"add_fk_table";->$ADD_FK_Table)
+pgSQL_Build_Select_Ptr (1;"add_fk_key";->$ADD_FK_Key)
+pgSQL_Build_Select_Ptr (1;"add_type";->$tAddType)
+pgSQL_Build_Select_Ptr (1;"add_apt_st_flr";->$ADD_Apt_St_Flr)
+pgSQL_Build_Select_Ptr (1;"add_in_us_address";->$iPopulatePostalProvince)
+
+pgSQL_Build_Select_Ptr (2;"add_key = "+String([FOR]PET_ADD_Key))
+//
+End if 
+4DW_Insert_Tag ($1;"[*ADD_KEY_P*]";String($ADD_Key))
+  //
+If ($ADD_Key=-1)
+$ADD_Key:=0
+End if 
+  //
+If ($iPopulatePostalProvince=0)
+4DW_Insert_Tag ($1;"[*ADD_KEY_P_SZ*]";String($ADD_Key))  //state zip
+4DW_Insert_Tag ($1;"[*ADD_KEY_P_PP*]";String(0))  //postal province
+Else 
+4DW_Insert_Tag ($1;"[*ADD_KEY_P_SZ*]";String(0))  //state zip
+4DW_Insert_Tag ($1;"[*ADD_KEY_P_PP*]";String($ADD_Key))  //postal province
+End if 
+  //
+4DW_Insert_Tag ($1;"[*ADD_FK_Table_P*]";String($ADD_FK_Table))
+4DW_Insert_Tag ($1;"[*ADD_FK_Key_P*]";String($ADD_FK_Key))
+4DW_Insert_Tag ($1;"[*ADD_Type_P*]";$tAddType)
+4DW_Set_PDF_Radio_Button ($1;"s1401/Field/36:35/Mixed";$ADD_Apt_St_Flr)
+If ($ADD_Key>0)
+4DW_Set_PDF_Radio_Button ($1;"s1401/Field/36:37";$iPopulatePostalProvince)
+End if 
+//
+  //====================== Mailing Address ====================
+//
+If (Not($bHas_Pet_Mailing_ADD_Record))
+$ADD_Key:=-1
+$ADD_FK_Table:=61
+$ADD_FK_Key:=[FOR]Key
+$tAddType:="Mailing Address"
+$ADD_Apt_St_Flr:=0
+$iPopulatePostalProvince:=0
+Else 
+pgSQL_Build_Select_Ptr (0;"add")
+pgSQL_Build_Select_Ptr (1;"add_key";->$ADD_Key)
+pgSQL_Build_Select_Ptr (1;"add_fk_table";->$ADD_FK_Table)
+pgSQL_Build_Select_Ptr (1;"add_fk_key";->$ADD_FK_Key)
+pgSQL_Build_Select_Ptr (1;"add_type";->$tAddType)
+pgSQL_Build_Select_Ptr (1;"add_apt_st_flr";->$ADD_Apt_St_Flr)
+pgSQL_Build_Select_Ptr (1;"add_in_us_address";->$iPopulatePostalProvince)
+
+pgSQL_Build_Select_Ptr (2;"add_key = "+String([FOR]PET_MailingADD_Key))
+  //
+End if 
+4DW_Insert_Tag ($1;"[*ADD_KEY_Pm*]";String($ADD_Key))
+  //
+If ($ADD_Key=-1)
+$ADD_Key:=0
+End if 
+  //
+If ($iPopulatePostalProvince=0)
+4DW_Insert_Tag ($1;"[*ADD_KEY_Pm_SZ*]";String($ADD_Key))  //state zip
+4DW_Insert_Tag ($1;"[*ADD_KEY_Pm_PP*]";String(0))  //postal province
+Else 
+4DW_Insert_Tag ($1;"[*ADD_KEY_Pm_SZ*]";String(0))  //state zip
+4DW_Insert_Tag ($1;"[*ADD_KEY_Pm_PP*]";String($ADD_Key))  //postal province
+End if 
+  //
+4DW_Insert_Tag ($1;"[*ADD_FK_Table_Pm*]";String($ADD_FK_Table))
+4DW_Insert_Tag ($1;"[*ADD_FK_Key_Pm*]";String($ADD_FK_Key))
+4DW_Insert_Tag ($1;"[*ADD_Type_Pm*]";$tAddType)
+4DW_Set_PDF_Radio_Button ($1;"s1451/Field/36:35/Mixed";$ADD_Apt_St_Flr)
+If ($ADD_Key>0)
+4DW_Set_PDF_Radio_Button ($1;"s1451/Field/36:37";$iPopulatePostalProvince)
+End if 
+//B-01194 VP 11/08/2013 --------- End ----------
+
+
+//
+If (Not([FOR]Preload))
+  //QUERY([COM];[COM]Key=[FOR]PET_COM_Key)  `BUG B00522 NR 10/06/2006
+SQL_GetOneValue (->[COM];->[COM]Key;->[COM]Name;->[FOR]PET_COM_Key;->$tComName)
+[I_824]Filer_Com_Name:=$tComName  //BUG B00522 NR 10/06/2006
+  //UNLOAD RECORD([COM])  `BUG B00522 NR 10/06/2006
+  //
+  //----------- Company Current Address ------------ 
+UTL_Get_COM_Address ([PRC]COM_Petitioner_Key)
+$add1_street:=[ADD]Line1
+$add1_apt:=[ADD]Apt
+$add1_city:=[ADD]City
+$add1_state:=[ADD]State
+$add1_zip:=[ADD]Zip
+$add1_country:=[ADD]Country
+  //
+  //----------- Company Mailing Address ------------ 
+UTL_Get_Address (Table(->[COM]);[PRC]COM_Petitioner_Key;"Mailing";True)
+[I_824]P1_Street:=[ADD]Line1
+[I_824]P1_Apt:=[ADD]Apt
+[I_824]P1_City:=[ADD]City
+[I_824]P1_State:=[ADD]State
+[I_824]P1_Zip:=[ADD]Zip
+[I_824]P1_Country:=[ADD]Country
+  //
+[I_824]Filer_Citizenship:=""
+[I_824]Filer_COB:=""
+[I_824]Filer_DOB:=""
+[I_824]Filer_Imm_Stat:=""
+[I_824]Filer_Nat_Cert_Num:=""
+[FOR]PET_FN_First:=[FOR]CO_Signor_fName
+[FOR]PET_FN_Last:=[FOR]CO_Signor_lName
+[FOR]PET_FN_Full_Middle:=[FOR]CO_Signor_mName
+[FOR]PET_Signor_Name:=[FOR]CO_Signor_fName+c_Concat (" ";->[FOR]CO_Signor_lName;"")
+[FOR]PET_ARN:=""
+[FOR]PET_Social:=""
+  //QUERY([COM];[COM]Key=[PRC]COM_Petitioner_Key)
+  //SQL_GetOneValue (->[COM];->[COM]Key;->[COM]Tax_ID;->[PRC]COM_Petitioner_Key;->$tComTaxID) `BUG B06178 BH 12/13/2009
+$tSQL:="SELECT llx_decrypt(com_tax_id_enc) FROM com WHERE com_key = "+String([PRC]COM_Petitioner_Key)  //BUG B06178 BH 12/13/2009
+pgSQL_Query ($tSQL;1;->$tComTaxID)  //BUG B06178 BH 12/13/2009
+  //[FOR]PET_TIN:=[COM]Tax_ID
+[FOR]PET_TIN:=$tComTaxID
+  //UNLOAD RECORD([COM])
+UTL_Get_COM_Phone (37;[PRC]Company_Signor_Key;[PRC]COM_Petitioner_Key;"Main")
+[FOR]COM_PET_Phone:=[PHN]Phone
+[FOR]CO_Signor_Phone:=[PHN]Phone  //BUG B00522 NR 10/06/2006
+  //
+End if 
+  //
+: ($Filer="Individual")
+4DW_Insert_Tag ($1;"[*FNL_KEY_P*]";String([PRC]Petitioner_Key))
+4DW_Insert_Tag ($1;"[*ADD_KEY_P*]";String([FOR]PET_ADD_Key))
+4DW_Insert_Tag ($1;"[*COM_KEY_P*]";"0")
+If (Not([FOR]Preload))
+[I_824]Filer_Com_Name:=""  //BUG B00522 NR 10/06/2006
+  //
+UTL_Get_Address (Table(->[FNL]);[PRC]Petitioner_Key;"Current Address";True)
+$add1_street:=[ADD]Line1
+$add1_apt:=[ADD]Apt
+$add1_city:=[ADD]City
+$add1_state:=[ADD]State
+$add1_zip:=[ADD]Zip
+$add1_country:=[ADD]Country
+  //
+UTL_Get_Address (Table(->[FNL]);[PRC]Petitioner_Key;"Mailing Address")
+[I_824]P1_Street:=[ADD]Line1
+[I_824]P1_Apt:=[ADD]Apt
+[I_824]P1_City:=[ADD]City
+[I_824]P1_State:=[ADD]State
+[I_824]P1_Zip:=[ADD]Zip
+[I_824]P1_Country:=[ADD]Country
+  //
+  //------- Empty Individual Petitioner Name -----
+  //QUERY([FNL];[FNL]Key=[PRC]Petitioner_Key)
+SQL_LoadRecord (->[FNL];String([PRC]Petitioner_Key))
+  //
+[I_824]Filer_Citizenship:=[FNL]Citizenship
+[I_824]Filer_COB:=[FNL]B_Country
+[I_824]Filer_DOB:=LLX_Format_Date (->[FNL]DOB)  //BUG B00522 NR 10/06/2006
+  //
+
+[FOR]PET_FN_Last:=[FNL]lName
+[FOR]PET_FN_First:=[FNL]fName
+  //[FOR]PET_FN_Full_Middle:=[FNL]Middle_Init `BUG B08682 JM 12/29/2010
+[FOR]PET_Signor_Name:=[FNL]Full_Name
+[FOR]PET_Social:=[FNL]SSN
+[FOR]PET_TIN:=[FNL]TIN
+[FOR]PET_ARN:=[FNL]ARN
+[I_824]Filer_Imm_Stat:=[FNL]Immigration_Status
+[I_824]Filer_Nat_Cert_Num:=[FNL]Naturalization_Cert_No
+  //UNLOAD RECORD([FNL])
+UNLOAD RECORD([FNL])
+UTL_Get_Phone (14;[PRC]Petitioner_Key;"Daytime";False)
+[FOR]COM_PET_Phone:=[PHN]Phone
+[FOR]CO_Signor_Phone:=[PHN]Phone  //BUG B00522 NR 10/06/2006
+  //
+End if 
+Else   //None
+  //
+4DW_Insert_Tag ($1;"[*ADD_KEY_P*]";String([FOR]PET_ADD_Key))
+4DW_Insert_Tag ($1;"[*COM_KEY_P*]";"0")
+4DW_Insert_Tag ($1;"[*FNL_KEY_P*]";"0")
+  //
+If (Not([FOR]Preload))
+[I_824]Filer_Com_Name:=""  //BUG B00522 NR 10/06/2006
+  //
+$add1_street:=""
+$add1_apt:=""
+$add1_city:=""
+$add1_state:=""
+$add1_zip:=""
+$add1_country:=""
+  //
+  //------- Empty Individual Petitioner Name -----
+[FOR]PET_FN_First:=""
+[FOR]PET_FN_Last:=""
+[FOR]PET_FN_Middle:=""
+[FOR]PET_FN_Full_Middle:=""
+[FOR]PET_Social:=""
+[FOR]PET_TIN:=""
+[FOR]PET_ARN:=""
+[FOR]COM_PET_Phone:=""
+[FOR]PET_Signor_Name:=""
+[I_824]Filer_Citizenship:=""
+[I_824]Filer_COB:=""
+[I_824]Filer_DOB:=""
+[I_824]P1_Street:=""
+[I_824]P1_Apt:=""
+[I_824]P1_City:=""
+[I_824]P1_State:=""
+[I_824]P1_Zip:=""
+[I_824]P1_Country:=""
+[I_824]Filer_Imm_Stat:=""
+[I_824]Filer_Nat_Cert_Num:=""
+[FOR]CO_Signor_Phone:=""
+  //
+End if 
+End case 
+  //
+If (Not([FOR]Preload))
+READ WRITE([ADD])
+  //QUERY([ADD];[ADD]Key=[FOR]PET_ADD_Key)
+SQL_LoadRecord (->[ADD];String([FOR]PET_ADD_Key))
+[ADD]Line1:=$add1_street
+[ADD]Apt:=$add1_apt
+[ADD]City:=$add1_city
+[ADD]State:=$add1_state
+[ADD]Zip:=$add1_zip
+[ADD]Country:=$add1_country
+c_Save_Record (->[ADD])
+End if 
+
+  //
+  //---------- [FNL] (Benificiary) [1000] Data Pokers ----------
+  //
+  //QUERY([FNL];[FNL]Key=$FNL_Key_B)
+SQL_LoadRecord (->[FNL];String($FNL_Key_B))
+4DW_Insert_Tag ($1;"[*FNL_Key_B*]";String($FNL_Key_B))
+  //
+UTL_Get_Address (Table(->[FNL]);$FNL_KEY_B;"current address";True)  //BUG B06544 BH 02/01/2010  `BUG B06544 BH 02/09/2010
+$ADD_Key:=[ADD]Key
+If ($ADD_Key=0)
+$ADD_Key:=-1
+Else 
+$addCurrStreet:=[ADD]Line1
+End if 
+4DW_Insert_Tag ($1;"[*ADD_Key_BH*]";String($ADD_Key))
+  //
+  //UTL_Get_Address (Table(->[FNL]);$FNL_KEY_B;"Mailing Address";True)  `BUG B06544 BH 02/11/2010
+UTL_Get_ADD (Table(->[FNL]);$FNL_KEY_B;"Mailing Address";True)  //BUG B06544 BH 02/16/2010
+$ADD_Key:=[ADD]Key
+If ($ADD_Key=0)
+$ADD_Key:=-1
+Else 
+  //BUG B06544 BH 02/16/2010 ---------- REVERT BACK ----------
+  //BUG B06544 BH 02/12/210 ---------- START ---------
+Case of 
+: ($addCurrStreet="")  //no current address
+$ADD_Key:=-1
+: ($addCurrStreet#[ADD]Line1)  //show address
+$ADD_Key:=[ADD]Key
+Else 
+$ADD_Key:=0
+End case 
+  //BUG B06544 BH 02/12/210 ---------- END ----------
+  //
+End if 
+4DW_Insert_Tag ($1;"[*ADD_Key_BM*]";String($ADD_Key))
+  //
+UTL_Get_Phone (Table(->[FNL]);$FNL_KEY_B;"Daytime")
+$PHN_Key:=[PHN]Key
+If ($PHN_Key=0)
+$PHN_Key:=-1
+End if 
+4DW_Insert_Tag ($1;"[*PHN_Key_H*]";String($PHN_Key))
+  //
+If ([FRM]Key#[FNL]FK_Key)  //BUG B04063 GJM 08/19/2008 ---------- BEGIN ----------
+  //QUERY([FRM];[FRM]Key=[FNL]FK_Key)
+SQL_LoadRecord (->[FRM];String([FNL]FK_Key))
+End if 
+If (([FRM]A_Num_Pad_Zeroes) & (Length([FOR]PET_ARN)<9) & (Length([FOR]PET_ARN)>0))
+[FOR]PET_ARN:="0"*(9-Length([FOR]PET_ARN))+[FOR]PET_ARN
+End if   //BUG B04063 GJM 08/19/2008 ---------- END ----------
+  //
+  //---------- [I_824] Data Poker [9800] ----------
+  //
+4DW_Insert_Tag ($1;"[*UFOR_Key*]";String([I_824]Key))
+4DW_Set_PDF_Radio_Button ($1;"s9801/Field/94:4";[I_824]P2_Type)
+UTL_FRM_Receipt_List (->aHTML;"[RCTs_List*]")  //BUG B02120 KDK 08/07/2007
+  //
+  //---------- family pokers [2000] ----------
+  // 
+  //BUG B04154 VP 09/08/2008  Adding Addendum---------- Start --------
+  //If checkbox C is checked in Part 2 then only this code will be executed
+  //
+If ([I_824]P2_Type=3)
+UTL_Get_Family2 ($FNL_Key_B;"*";"*";"15:16:=:t:&")  //BUG B05443 GJM 06/18/2009
+  //QUERY([FNR];[FNR]FNL_Key_P=$FNL_Key_B)
+  //QUERY SELECTION([FNR];[FNR]Following_To_Join=True)
+  //$R:=Records in selection([FNR])
+  //ORDER BY([FNR];[FNR]Type;<;[FNR]Key;>)
+
+$tWhereClause:=""
+$tWhereClause:=$tWhereClause+"fnr_key IN ("+UTL_Array_To_Text (->aiFamily_FNR_Keys;",")+")"
+$tWhereClause:=$tWhereClause+" ORDER BY LOWER(fnr_type) desc, fnr_key asc"  //BUG B05906 SWM 12/13/2009
+  //
+pgSQL_Query ("SELECT fnr_key FROM fnr WHERE "+$tWhereClause;0;->aiFamily_FNR_Keys)
+  //
+$R:=Size of array(aiFamily_FNR_Keys)
+  //
+$M:=1
+$T:=$M
+If ($R>$M)
+$T:=$R
+End if   //
+$Block:=""
+For ($i;1;$T)
+$Find:="[*FNL_Key_"+String($i)+"*]"
+$Find2:="[*FNR_Key_"+String($i)+"*]"
+$Find3:="s"+String((100*($i+20))+1)
+If ($i<=Size of array(aiFamily_FNR_Keys))  //BUG B06178 JV 12/9/2009 changed
+SQL_LoadRecord (->[FNR];String(aiFamily_FNR_Keys{$i}))
+UTL_Get_Address (Table(->[FNL]);[FNR]FNL_Key_S;"Current Address";True)  //BUG B06544 BH 02/01/2010
+$ADD_Key:=[ADD]Key  //BUG B06544 BH 02/01/2010
+If ([I_824]foreign_address="")  //BUG B12711 CO 2013/07/03 ---------- IF ----------
+[I_824]foreign_address:=[ADD]Long_Add
+End if 
+
+UTL_Get_Phone (14;[FNR]FNL_Key_S;"Home")  //BUG B06544 BH 02/01/2010
+$PHN_Key:=[PHN]Key  //BUG B06544 BH 02/01/2010
+Else   //BUG B06544 BH 02/01/2010 ---------- ELSE BLOCK ----------
+$ADD_Key:=-1
+$PHN_Key:=-1
+End if 
+  //GOTO SELECTED RECORD([FNR];$i)
+  //
+  //QUERY([FNL];[FNL]Key=[FNR]FNL_Key_S)
+  //UTL_Get_Address (Table(->[FNL]);[FNL]Key;"Current Address";True)  `BUG B06544 BH 02/01/2010
+  //$ADD_Key:=[ADD]Key  `BUG B06544 BH 02/01/2010
+If ($ADD_Key=0)
+$ADD_Key:=-1
+End if 
+  //UTL_Get_Phone (14;[FNL]Key;"Home")
+  //UTL_Get_Phone (14;[FNR]FNL_Key_S;"Home")  `BUG B06544 BH 02/01/2010
+  //$PHN_Key:=[PHN]Key  `BUG B06544 BH 02/01/2010
+If ($PHN_Key=0)
+$PHN_Key:=-1
+Else 
+[PHN]Phone:=c_Format_String ([PHN]Phone;"Phone")
+End if 
+  //
+Case of 
+: ($i>$M)  //Go to Addendum   
+SQL_LoadRecord (->[FNL];String([FNR]FNL_Key_S))
+$Block:=$Block+c_Concat ("Family Name ";->[FNL]lName;"; ")
+$Block:=$Block+c_Concat ("Given Name: ";->[FNL]fName;"; ")
+$Block:=$Block+c_Concat ("Middle Name: ";->[FNL]mName;"; ")
+$Block:=$Block+c_Concat ("Relationship: ";->[FNR]Type;"; ")
+If ([ADD]Key>0)
+$Block:=$Block+Carriage Return Char
+$Block:=$Block+c_Concat ("Foreign Address: ";->[ADD]Long_Add;"; ")
+End if 
+If ([PHN]Key>0)
+$Block:=$Block+c_Concat ("Foreign Telephone Number: ";->[PHN]Phone;"; ")
+End if 
+$Block:=$Block+Double Carriage Return Char
+  //
+: ($i>$R)  //Poke in Blank Row
+4DW_Insert_Tag ($1;$Find;"-1")
+4DW_Insert_Tag ($1;$Find2;"-1")
+4DW_Insert_Tag ($1;"[*ADD_Key_"+String($i)+"*]";"-1")
+4DW_Insert_Tag ($1;"[*PHN_Key_"+String($i)+"*]";"-1")
+  //
+Else   //put it on the form
+  //If ($i=1)
+  //
+  //End if 
+4DW_Insert_Tag ($1;$Find;String([FNR]FNL_Key_S))
+4DW_Insert_Tag ($1;$Find2;String([FNR]Key))
+4DW_Insert_Tag ($1;"[*ADD_Key_"+String($i)+"*]";String($ADD_Key))
+4DW_Insert_Tag ($1;"[*PHN_Key_"+String($i)+"*]";String($PHN_Key))
+
+  //
+End case 
+End for 
+If ($Block#"")
+$Addendum:=$Addendum+"Part 3: Additional Dependents:"+Double Carriage Return Char+$Block+Carriage Return Char
+End if 
+Else 
+4DW_Insert_Tag ($1;"[*FNL_Key_1*]";"-1")
+4DW_Insert_Tag ($1;"[*FNR_Key_1*]";"-1")
+4DW_Insert_Tag ($1;"[*ADD_Key_1*]";"-1")
+4DW_Insert_Tag ($1;"[*PHN_Key_1*]";"-1")
+[I_824]foreign_address:=""  //BUG B12711 CO 2013/07/03
+End if 
+  //
+  //BUG B04154 VP 09/08/2008 ---------- End --------
+  //
+If (Not([FOR]Preload))
+[FOR]Preload:=True
+c_Save_Record (->[FOR])
+End if 
+  //---------- Addendum ----------
+  //
+[I_824]Addendum:=UTL_Build_Addendum ([FOR]Key;$Addendum)
+[I_824]OPened:=True
+  //
