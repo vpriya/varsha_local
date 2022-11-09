@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\myPractice\\keep safe here the original fnapp folder for now\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj": {}
+    "C:\\Users\\vpriya\\Documents\\varsha_local\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj": {}
   },
   "projects": {
-    "C:\\myPractice\\keep safe here the original fnapp folder for now\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj": {
+    "C:\\Users\\vpriya\\Documents\\varsha_local\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\myPractice\\keep safe here the original fnapp folder for now\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\vpriya\\Documents\\varsha_local\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj",
         "projectName": "ForeignNationalAPI",
-        "projectPath": "C:\\myPractice\\keep safe here the original fnapp folder for now\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj",
+        "projectPath": "C:\\Users\\vpriya\\Documents\\varsha_local\\ForeignNationalAPI\\ForeignNationalAPI\\ForeignNationalAPI.csproj",
         "packagesPath": "C:\\Users\\vpriya\\.nuget\\packages\\",
-        "outputPath": "C:\\myPractice\\keep safe here the original fnapp folder for now\\ForeignNationalAPI\\ForeignNationalAPI\\obj\\",
+        "outputPath": "C:\\Users\\vpriya\\Documents\\varsha_local\\ForeignNationalAPI\\ForeignNationalAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -88,7 +88,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -100,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
