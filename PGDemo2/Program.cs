@@ -11,8 +11,9 @@ namespace PGDemo2
         static void Main(string[] args)
         {
             //TestConnection();
-            InsertRecord();
+            //InsertRecord();
             //DeleteRecord();
+            UpdateRecord();
             Console.ReadKey();
         }
 
@@ -20,7 +21,7 @@ namespace PGDemo2
         {
             using(NpgsqlConnection con=GetConnection())
             {
-                string query = @"insert into public.Students(Name,Fees) values('VP4',400.0)";
+                string query = @"insert into public.Students(Name,Fees) values('VP6',600.0)";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 int rowsAffected = cmd.ExecuteNonQuery();
@@ -35,7 +36,7 @@ namespace PGDemo2
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = @"delete from students where id=2;";
+                string query = @"delete from students where id=5;";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 int rowsAffected = cmd.ExecuteNonQuery();
@@ -45,6 +46,23 @@ namespace PGDemo2
                 }
             }
 
+        }
+
+        private static void UpdateRecord()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = @"UPDATE students
+                                SET name='varsha priya2'
+                                WHERE id=4;";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected == 1)
+                {
+                    Console.WriteLine("Record updated");
+                }
+            }
         }
 
         private static void TestConnection()

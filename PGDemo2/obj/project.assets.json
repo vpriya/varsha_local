@@ -92,11 +92,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\myPractice\\PGDemo2\\PGDemo2.csproj",
+      "projectUniqueName": "C:\\Users\\vpriya\\Documents\\varsha_local\\PGDemo2\\PGDemo2.csproj",
       "projectName": "PGDemo2",
-      "projectPath": "C:\\myPractice\\PGDemo2\\PGDemo2.csproj",
+      "projectPath": "C:\\Users\\vpriya\\Documents\\varsha_local\\PGDemo2\\PGDemo2.csproj",
       "packagesPath": "C:\\Users\\vpriya\\.nuget\\packages\\",
-      "outputPath": "C:\\myPractice\\PGDemo2\\obj\\",
+      "outputPath": "C:\\Users\\vpriya\\Documents\\varsha_local\\PGDemo2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
