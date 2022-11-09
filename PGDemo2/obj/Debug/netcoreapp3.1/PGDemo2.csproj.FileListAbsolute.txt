@@ -1,0 +1,16 @@
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.exe
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.deps.json
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.runtimeconfig.json
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.runtimeconfig.dev.json
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.dll
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\PGDemo2.pdb
+C:\myPractice\PGDemo2\bin\Debug\netcoreapp3.1\Npgsql.dll
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.csproj.AssemblyReference.cache
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.GeneratedMSBuildEditorConfig.editorconfig
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.AssemblyInfoInputs.cache
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.AssemblyInfo.cs
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.csproj.CoreCompileInputs.cache
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.csproj.CopyComplete
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.dll
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.pdb
+C:\myPractice\PGDemo2\obj\Debug\netcoreapp3.1\PGDemo2.genruntimeconfig.cache
