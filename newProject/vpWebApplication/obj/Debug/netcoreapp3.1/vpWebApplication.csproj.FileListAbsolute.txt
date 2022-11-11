@@ -22,3 +22,7 @@ C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\obj\Debug\net
 C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\obj\Debug\netcoreapp3.1\vpWebApplication.dll
 C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\obj\Debug\netcoreapp3.1\vpWebApplication.pdb
 C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\obj\Debug\netcoreapp3.1\vpWebApplication.genruntimeconfig.cache
+C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\bin\Debug\netcoreapp3.1\Npgsql.dll
+C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+C:\Users\vpriya\Documents\varsha_local\newProject\vpWebApplication\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll
