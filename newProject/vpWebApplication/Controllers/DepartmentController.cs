@@ -31,7 +31,7 @@ namespace vpWebApplication.Controllers
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
-                using(NpgsqlCommand myCommand=new NpgsqlCommand(query, myCon))
+                using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
