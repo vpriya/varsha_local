@@ -11,10 +11,10 @@ namespace vpWebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentController : ControllerBase
+    public class EmployeeController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public DepartmentController(IConfiguration configuration)
+        public EmployeeController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -24,15 +24,19 @@ namespace vpWebApplication.Controllers
 
         {
             string query = @"
-                            select DepartmentId, DepartmentName 
-                            from public.Department
+                            select EmployeeId as ""EmployeeId"", 
+                            EmployeeName as ""EmployeeName"", 
+                            Department as ""Department"", 
+                            to_char(DateOfJoining,'YYYY-MM-DD') as ""DateOfJoining"",
+                            PhotoFileName as ""PhotoFileName""
+                            from public.Employee
                             ";
             DataTable table = new DataTable();// creating a datatable object
 
             string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
 
             NpgsqlDataReader myReader; // make use of SQLdatareader to populate the data into datatable object
-            
+
             using (NpgsqlConnection myCon = new NpgsqlConnection(sqlDataSource))
             {
                 myCon.Open();
@@ -52,11 +56,11 @@ namespace vpWebApplication.Controllers
 
         [HttpPost]
         // we will be sending the department object to post method in the form body
-        public JsonResult Post(Department dep)
+        public JsonResult Post(Employee emp)
         {
             string query = @"
-                            insert into public.Department(DepartmentName) 
-                            values (@DepartmentName)
+                            insert into public.Employee(EmployeeName,Department,DateOfJoining,PhotoFileName) 
+                            values (@EmployeeName,@Department,@DateOfJoining,@PhotoFileName)
                             ";
             DataTable table = new DataTable();// creating a datatable object
 
@@ -70,7 +74,10 @@ namespace vpWebApplication.Controllers
                 //with given sql sonnection and sql command, we will execute our query
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@DepartmentName", dep.DepartmentName);
+                    myCommand.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
+                    myCommand.Parameters.AddWithValue("@Department", emp.Department);
+                    myCommand.Parameters.AddWithValue("@DateOfJoining", Convert.ToDateTime(emp.DateOfJoining));
+                    myCommand.Parameters.AddWithValue("@PhotoFileName", emp.PhotoFileName);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);// fill the data in the datatable using sql data-reader
 
@@ -85,12 +92,15 @@ namespace vpWebApplication.Controllers
         }
         [HttpPut]
         // we will be sending the department object to post method in the form body
-        public JsonResult Put(Department dep)
+        public JsonResult Put(Employee emp)
         {
             string query = @"
-                            update public.Department set 
-                            DepartmentName = '"+dep.DepartmentName+@"'
-                            where DepartmentId = "+dep.DepartmentId + @"
+                            update public.Employee set 
+                            EmployeeName = '" + emp.EmployeeName + @"',
+                            Department = '"" + emp.Department + @""',
+                            DateOfJoining = '"" + emp.DateOfJoining + @""',
+                            PhotoFileName = '"" + emp.PhotoFileName + @""',
+                            where EmployeeId = " + emp.EmployeeId + @"
                             ";
             DataTable table = new DataTable();// creating a datatable object
 
@@ -104,7 +114,10 @@ namespace vpWebApplication.Controllers
                 //with given sql sonnection and sql command, we will execute our query
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@DepartmentName", dep.DepartmentName);
+                    myCommand.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
+                    myCommand.Parameters.AddWithValue("@Department", emp.Department);
+                    myCommand.Parameters.AddWithValue("@DateOfJoining", Convert.ToDateTime(emp.DateOfJoining));
+                    myCommand.Parameters.AddWithValue("@PhotoFileName", emp.PhotoFileName);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);// fill the data in the datatable using sql data-reader
 
@@ -123,8 +136,8 @@ namespace vpWebApplication.Controllers
         public JsonResult Delete(int id)
         {
             string query = @"
-                            delete from public.Department
-                            where DepartmentId = " + id + @"
+                            delete from public.Employee
+                            where EmployeeId = " + id + @"
                             ";
             DataTable table = new DataTable();// creating a datatable object
 
@@ -138,7 +151,6 @@ namespace vpWebApplication.Controllers
                 //with given sql sonnection and sql command, we will execute our query
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@DepartmentId", id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);// fill the data in the datatable using sql data-reader
 
@@ -151,6 +163,5 @@ namespace vpWebApplication.Controllers
             return new JsonResult("Deleted Successfully");
 
         }
-
     }
 }
