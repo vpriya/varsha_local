@@ -96,12 +96,13 @@ namespace vpWebApplication.Controllers
         {
             string query = @"
                             update public.Employee set 
-                            EmployeeName = '" + emp.EmployeeName + @"',
-                            Department = '"" + emp.Department + @""',
-                            DateOfJoining = '"" + emp.DateOfJoining + @""',
-                            PhotoFileName = '"" + emp.PhotoFileName + @""',
+                            EmployeeName = '" + emp.EmployeeName + @" '
+                            Department = '"" + emp.Department + @""'
+                            DateOfJoining = '"" + emp.DateOfJoining + @""'
+                            PhotoFileName = '"" + emp.PhotoFileName + @""'
                             where EmployeeId = " + emp.EmployeeId + @"
                             ";
+
             DataTable table = new DataTable();// creating a datatable object
 
             string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
@@ -114,6 +115,7 @@ namespace vpWebApplication.Controllers
                 //with given sql sonnection and sql command, we will execute our query
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@EmployeeId", emp.EmployeeId);
                     myCommand.Parameters.AddWithValue("@EmployeeName", emp.EmployeeName);
                     myCommand.Parameters.AddWithValue("@Department", emp.Department);
                     myCommand.Parameters.AddWithValue("@DateOfJoining", Convert.ToDateTime(emp.DateOfJoining));

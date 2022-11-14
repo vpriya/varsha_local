@@ -104,6 +104,7 @@ namespace vpWebApplication.Controllers
                 //with given sql sonnection and sql command, we will execute our query
                 using (NpgsqlCommand myCommand = new NpgsqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@DepartmentId", dep.DepartmentId);
                     myCommand.Parameters.AddWithValue("@DepartmentName", dep.DepartmentName);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);// fill the data in the datatable using sql data-reader
