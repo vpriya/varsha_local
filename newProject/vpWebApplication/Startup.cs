@@ -73,8 +73,6 @@ namespace vpWebApplication
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(),"PhotosEmp")),
                 RequestPath="/PhotosEmp"
-
-
             }
             );
 

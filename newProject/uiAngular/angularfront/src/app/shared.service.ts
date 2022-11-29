@@ -12,7 +12,7 @@ export class SharedService {
   constructor(private http:HttpClient) { }
 
   getDepList():Observable<any[]>{
-    return this.http.get<any>(this.APIUrl+'/department');
+    return this.http.get<any>(this.APIUrl+'/Department');
   }
 
   addDepartment(val:any){
@@ -50,6 +50,5 @@ export class SharedService {
   getAllDepartmentNames():Observable<any[]>{
     return this.http.get<any[]>(this.APIUrl+'/Employee/GetAllDepartmentNames');
   }
-
 
 }
