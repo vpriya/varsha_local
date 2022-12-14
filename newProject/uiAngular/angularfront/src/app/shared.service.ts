@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Department } from './model/department.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  readonly APIUrl = "http://localhost:44383/api";
-  readonly PhotoUrl = "http://localhost:44383/PhotosEmp";
+  readonly APIUrl = "https://localhost:44383/api";
+  readonly PhotoUrl = "https://localhost:44383/PhotosEmp";
 
   constructor(private http:HttpClient) { }
 
-  getDepList():Observable<any[]>{
-    return this.http.get<any>(this.APIUrl+'/department');
+  getDepList():Observable<Department[]>{
+    return this.http.get<Department[]>(this.APIUrl+'/department');
   }
 
   addDepartment(val:any){
@@ -24,7 +25,7 @@ export class SharedService {
   }
 
   deleteDepartment(val:any){
-    return this.http.delete(this.APIUrl+'/Department/',val);
+    return this.http.delete(this.APIUrl+'/Department/'+val);
   }
 
   getEmpList():Observable<any[]>{
@@ -40,7 +41,7 @@ export class SharedService {
   }
 
   deleteEmployee(val:any){
-    return this.http.delete(this.APIUrl+'/Employee/',val);
+    return this.http.delete(this.APIUrl+'/Employee/'+val);
   }
 
   UploadPhoto(val:any){
