@@ -1,44 +1,50 @@
 <div class="container">
-  <h1>new html for CRUD</h1>
+  <h1>Card details Application for CRUD</h1>
+
   <div class="cards-container">
     <div class="cards-form">
-      <form>
+      <form  #form="ngForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="">Card Name</label>
-          <input type="text" name="cardName">
+          <input type="text" name="cardName" [(ngModel)]="card.cardholderName">
         </div>
         <div class="form-group">
           <label for="">Card Number</label>
-          <input type="text" name="cardNumber">
+          <input type="text" name="cardNumber" [(ngModel)]="card.cardNumber" class="form-control" minlength="16" maxlength="16" >
         </div>
         <div class="form-group form-group-inline">
           <div>
             <label for="">CVC</label>
-            <input type="text" name="cvc">
+            <input type="text" name="cvc" [(ngModel)]="card.cvc" class="form-control" minlength="3" maxlength="3">
           </div>
           <div>
             <label for="">Expiry Month</label>
-            <input type="text" name="expiryMonth">
+            <input type="text" name="expiryMonth" [(ngModel)]="card.expiryMonth" minlength="2" maxlength="2">
           </div>
           <div>
             <label for="">Expiry Year</label>
-            <input type="text" name="expiryYear">
+            <input type="text" name="expiryYear" [(ngModel)]="card.expiryYear" minlength="2" maxlength="2">
           </div>
-          
         </div>
-
+        <div class="form-group">
+          <button>Save</button>
+        </div>
       </form>
     </div>
     <div class="cards-grid">
-      <div class="card-row">
-        <div class="card-row-details">
-          <span>VVV PPP</span>
-          <span>2323232324</span>
+
+      <div class="card-row" *ngFor="let card of cards">
+        <div class="card-row-details" (click)="populateForm(card)">
+          <span>{{ card.cardholderName}}</span>
+          <span>{{ card.cardNumber}}</span>
         </div>
         <div class="card-row-action">
-          <a><i class="fa-sharp fa-solid fa-trash-can"></i></a>
+          <a (click)="deleteCard(card.id)"><i class="fa-sharp fa-solid fa-trash-can"></i></a>
         </div>
       </div>
+
+
+
     </div>
   </div>
 </div>

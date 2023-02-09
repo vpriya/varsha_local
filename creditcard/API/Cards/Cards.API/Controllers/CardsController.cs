@@ -7,10 +7,10 @@ namespace Cards.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CardController : Controller
+    public class CardsController : Controller
     {
         private readonly CardsDbContext cardsDbContext;
-        public CardController(CardsDbContext cardsDbContext)
+        public CardsController(CardsDbContext cardsDbContext)
         {
             this.cardsDbContext = cardsDbContext;
         }
@@ -47,7 +47,7 @@ namespace Cards.API.Controllers
             card.Id = Guid.NewGuid();
             await cardsDbContext.Cards.AddAsync(card);
             await cardsDbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCard), new {id = card.Id}, card);
+            return CreatedAtAction(nameof(GetCard), new { id = card.Id }, card);
         }
 
         // Updating A Card

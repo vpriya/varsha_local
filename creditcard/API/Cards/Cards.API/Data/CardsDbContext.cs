@@ -8,7 +8,7 @@ namespace Cards.API.Data
         public CardsDbContext(DbContextOptions options) : base(options)
         {
         }
-        //Dbset
+        // Dbset
         public DbSet<Card> Cards { get; set; }
 
     }
