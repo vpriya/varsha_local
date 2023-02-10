@@ -1,4 +1,5 @@
-﻿using Cards.API.Data;
+﻿using Cards.API.CardsRepository;
+using Cards.API.Data;
 using Cards.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,19 @@ namespace Cards.API.Controllers
     public class CardsController : Controller
     {
         private readonly CardsDbContext cardsDbContext;
-        public CardsController(CardsDbContext cardsDbContext)
+        private ICardRepository iCardRepository;
+        public CardsController(CardsDbContext cardsDbContext, ICardRepository iCardRepo)
         {
             this.cardsDbContext = cardsDbContext;
+            iCardRepository = iCardRepo;
         }
 
         // Get All Cards
         [HttpGet]
         public async Task<IActionResult> GetAllCards()
         {
-            var cards = await cardsDbContext.Cards.ToListAsync();
+            // var cards = await cardsDbContext.Cards.ToListAsync();
+            var cards = await iCardRepository.GetCards();
             return Ok(cards);
         }
 

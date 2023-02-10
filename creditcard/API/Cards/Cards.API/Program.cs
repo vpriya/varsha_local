@@ -1,3 +1,4 @@
+using Cards.API.CardsRepository;
 using Cards.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,9 @@ builder.Services.AddSwaggerGen();
 // Inject Dbcontext
 builder.Services.AddDbContext<CardsDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("CardsDbConnectionString")));
+
+//Inject Repo
+builder.Services.AddScoped<ICardRepository, sqlCardRepository>();
 
 builder.Services.AddCors((setup) =>
 {
