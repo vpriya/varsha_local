@@ -5,7 +5,12 @@ namespace Cards.API.CardsRepository
 {
     public interface ICardRepository
     {
-         Task<List<Card>> GetCards();
+        //These methods will be defined in SqlRepository method and will be called inside the controller
+        Task<List<Card>> GetCards();
+        Task<Card?> GetOneCard(Guid id);
+        Task<Card?> AddOneCard(Card card);
+        Task DeleteOneCard(Guid id);
+        Task<Card?> UpdateOneCard(Guid id, Card card);
 
     }
 }

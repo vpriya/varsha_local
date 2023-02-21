@@ -33,8 +33,9 @@ namespace Cards.API.Controllers
         [ActionName("GetCard")]
         public async Task<IActionResult> GetCard([FromRoute] Guid id)
         {
-            var card = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
-            if(card != null)
+            //var card = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
+            var card = await iCardRepository.GetOneCard(id);
+            if (card != null)
             {
                 return Ok(card);
             }
