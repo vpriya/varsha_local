@@ -1,5 +1,5 @@
 ﻿using Cards.API.Data;
-using Cards.API.Models;
+using Cards.API.DTOdomainModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cards.API.CardsRepository
@@ -13,20 +13,20 @@ namespace Cards.API.CardsRepository
             this._cardsDbContext = cardsDbContext;
         }
 
-        public async Task<List<Card>> GetCards()
+        public async Task<List<CardDto>> GetCards()
         {
             var cards = await _cardsDbContext.Cards.ToListAsync();
             return cards;
         }
 
-        public async Task<Card?> GetOneCard(Guid id)
+        public async Task<CardDto?> GetOneCard(Guid id)
         {
             var oneCard = await _cardsDbContext.Cards.SingleOrDefaultAsync(x => x.Id == id);
             return oneCard;
             
         }
 
-        public async Task<Card?> AddOneCard(Card addRequestedCard)
+        public async Task<CardDto?> AddOneCard(CardDto addRequestedCard)
         {
             addRequestedCard.Id = Guid.NewGuid();
             var result = await _cardsDbContext.Cards.AddAsync(addRequestedCard);
@@ -48,7 +48,7 @@ namespace Cards.API.CardsRepository
 
         }
 
-        public async Task<Card?> UpdateOneCard(Guid id, Card cardToUpdate)
+        public async Task<CardDto?> UpdateOneCard(Guid id, CardDto cardToUpdate)
         {
             //throw new NotImplementedException();
             var existingCard = await _cardsDbContext.Cards.SingleOrDefaultAsync(x => x.Id == id);
@@ -63,9 +63,7 @@ namespace Cards.API.CardsRepository
                 await _cardsDbContext.SaveChangesAsync();
                 return existingCard;
             }
-
             return null;
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Cards.API.CardsRepository;
 using Cards.API.Data;
-using Cards.API.Models;
+using Cards.API.DTOdomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +8,7 @@ namespace Cards.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CardsController : Controller
+    public class CardsController : ControllerBase
     {
         private readonly CardsDbContext cardsDbContext;
         private ICardRepository iCardRepository;
@@ -47,7 +47,7 @@ namespace Cards.API.Controllers
 
         // Add a Card
         [HttpPost]
-        public async Task<IActionResult> AddCard([FromBody] Card card)
+        public async Task<IActionResult> AddCard([FromBody] CardDto card)
         {
             card.Id = Guid.NewGuid();
             await cardsDbContext.Cards.AddAsync(card);
@@ -58,7 +58,7 @@ namespace Cards.API.Controllers
         // Updating A Card
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task <IActionResult> UpdateCard([FromRoute] Guid id, [FromBody] Card card)
+        public async Task <IActionResult> UpdateCard([FromRoute] Guid id, [FromBody] CardDto card)
         {
             var existingCard = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
             if (existingCard != null)

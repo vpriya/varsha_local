@@ -1,38 +1,55 @@
+
 <div class="container">
   <h1>Card details Application for CRUD</h1>
 
   <div class="cards-container">
     <div class="cards-form">
-      <form  #form="ngForm" (ngSubmit)="onSubmit()">
+      <form  name="myForm" #form="ngForm" (ngSubmit)="onSubmit()">
+
         <div class="form-group">
           <label for="">Card Name</label>
-          <input type="text" name="cardName" [(ngModel)]="card.cardholderName">
+          <input required type="text" name="cardName" #cardName=ngModel [(ngModel)]="card.cardholderName" minlength="4" >
+          <div *ngIf="cardName.invalid && cardName.touched">The name is required</div>
         </div>
         <div class="form-group">
           <label for="">Card Number</label>
-          <input type="text" name="cardNumber" [(ngModel)]="card.cardNumber" class="form-control" minlength="16" maxlength="16" >
+          <input required type="text" name="cardNumber" #cardNumber=ngModel [(ngModel)]="card.cardNumber" class="form-control" pattern="^[0-9]{16}$" maxlength="16">
+          <div *ngIf="cardNumber.invalid && cardNumber.touched" >Please enter a 16 digit valid card number</div>
         </div>
         <div class="form-group form-group-inline">
           <div>
-            <label for="">CVC</label>
-            <input type="text" name="cvc" [(ngModel)]="card.cvc" class="form-control" minlength="3" maxlength="3">
+            <!-- <label for="">CVC</label>
+            <input type="text" name="cvc" [(ngModel)]="card.cvc" class="form-control" pattern="^[0-9]{3}$" maxlength="3" formControlName="cardCVCCtrl">
+             -->
+
+            <label for="cvc" class="form-label">CVC</label>
+            <input required type="text" class="form-control" id="cvc" cvc #cvc=ngModel name="cvc" [(ngModel)]="card.cvc" pattern="^[0-9]{3}$" maxlength="3">
+            <div *ngIf="cvc.invalid && cvc.touched" class="error">CVC is not valid</div>
           </div>
           <div>
             <label for="">Expiry Month</label>
-            <input type="text" name="expiryMonth" [(ngModel)]="card.expiryMonth" minlength="2" maxlength="2">
+            <input required type="text" name="expiryMonth" #expiryMonth=ngModel [(ngModel)]="card.expiryMonth" pattern="^(0?[1-9]|1[012])$" maxlength="2">
+            <div *ngIf="expiryMonth.invalid && expiryMonth.touched" class="error">Month is not valid</div>
           </div>
           <div>
             <label for="">Expiry Year</label>
-            <input type="text" name="expiryYear" [(ngModel)]="card.expiryYear" minlength="2" maxlength="2">
+            <input required type="text" name="expiryYear" #expiryYear=ngModel [(ngModel)]="card.expiryYear" pattern="^\d\d$" maxlength="2" >
+            <div *ngIf="expiryYear.invalid && expiryYear.touched" class="error">Year is not valid</div>
           </div>
         </div>
-        <div class="form-group">
-          <button>Save</button>
+
+        <div class="form-group form-group-inline">
+          <div>
+            <button [disabled]="form.invalid">Add&#47;Save</button>
+          </div>
+          <div>
+            <button (click)="ClearCard(card.id)" >Clear</button>
+          </div>
         </div>
       </form>
     </div>
-    <div class="cards-grid">
 
+    <div class="cards-grid">
       <div class="card-row" *ngFor="let card of cards">
         <div class="card-row-details" (click)="populateForm(card)">
           <span>{{ card.cardholderName}}</span>
@@ -42,9 +59,7 @@
           <a (click)="deleteCard(card.id)"><i class="fa-sharp fa-solid fa-trash-can"></i></a>
         </div>
       </div>
-
-
-
     </div>
+    
   </div>
 </div>

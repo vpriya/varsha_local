@@ -52,7 +52,7 @@ form input[type="text"], form input[type="password"], form input[type="number"] 
 }
 
 form button {
-    background-color: black;
+    background-color: blue;
     padding: 0.5em 1em;
     color: white;
     border: none;
@@ -60,6 +60,12 @@ form button {
     border-radius: 2px;
     cursor: pointer;
     font-size: 1.2em;
+}
+
+form button:disabled, form button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 
 .card-row {
@@ -93,6 +99,17 @@ form button {
     color: white;
 }
 
-input.ng-invalid{
+ input.ng-invalid{
     border-left: 5px solid red;
+    border-color: red;
 }
+
+input.ng-valid{
+    border-left: 5px solid green;
+    border-color: green;
+} 
+
+/* input[type="text"]:invalid {
+    border-left: 5px solid red;
+    border-color: red;
+} */

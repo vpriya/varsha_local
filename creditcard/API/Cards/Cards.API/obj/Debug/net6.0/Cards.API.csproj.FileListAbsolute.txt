@@ -51,3 +51,5 @@ C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\obj\Debug\
 C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\obj\Debug\net6.0\Cards.API.pdb
 C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\obj\Debug\net6.0\Cards.API.genruntimeconfig.cache
 C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\obj\Debug\net6.0\ref\Cards.API.dll
+C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\vpriya\Documents\varsha_local\creditcard\API\Cards\Cards.API\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
