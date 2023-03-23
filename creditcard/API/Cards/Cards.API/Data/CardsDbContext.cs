@@ -1,4 +1,5 @@
 ﻿using Cards.API.DTOdomainModel;
+using Cards.API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cards.API.Data
@@ -9,7 +10,7 @@ namespace Cards.API.Data
         {
         }
         // Dbset
-        public DbSet<CardDto> Cards { get; set; }
+        public DbSet<Card> Cards { get; set; }
 
     }
 }

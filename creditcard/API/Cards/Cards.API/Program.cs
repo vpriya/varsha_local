@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CardsDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("CardsDbConnectionString")));
 
-// 
+// Inject AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 //Inject Repo

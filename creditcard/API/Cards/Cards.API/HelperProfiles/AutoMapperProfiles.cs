@@ -8,7 +8,8 @@ namespace Cards.API.HelperProfiles
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Card, CardDto>();
+            //type of source is Card and type of Destination is CardDto and vice-versa
+           CreateMap<Card, CardDto>().ReverseMap();
         }
     }
 }
