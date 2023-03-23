@@ -1,8 +1,10 @@
 ﻿using Cards.API.CardsRepository;
 using Cards.API.Data;
-using Cards.API.DTOdomainModel;
+using Cards.API.DTO_domainModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using Cards.API.Models;
 
 namespace Cards.API.Controllers
 {
@@ -10,12 +12,16 @@ namespace Cards.API.Controllers
     [Route("api/[controller]")]
     public class CardsController : ControllerBase
     {
-        private readonly CardsDbContext cardsDbContext;
-        private ICardRepository iCardRepository;
-        public CardsController(CardsDbContext cardsDbContext, ICardRepository iCardRepo)
+        private readonly CardsDbContext _cardsDbContext;
+        private ICardRepository iCardRepositoryData;
+        //Inject AutoMapper here in controller
+        private readonly IMapper _mapper;
+
+        public CardsController(CardsDbContext cardsDbContext, ICardRepository iCardRepo, IMapper mapper)
         {
-            this.cardsDbContext = cardsDbContext;
-            iCardRepository = iCardRepo;
+            _cardsDbContext = cardsDbContext;
+            iCardRepositoryData = iCardRepo;
+            _mapper = mapper;
         }
 
         // Get All Cards
@@ -23,8 +29,9 @@ namespace Cards.API.Controllers
         public async Task<IActionResult> GetAllCards()
         {
             // var cards = await cardsDbContext.Cards.ToListAsync();
-            var cards = await iCardRepository.GetCards();
-            return Ok(cards);
+            var cards = await iCardRepositoryData.GetCards();
+            var mappedCards = _mapper.Map<List<CardDto>>(cards);
+            return Ok(mappedCards);
         }
 
         // Get single Card
@@ -33,8 +40,7 @@ namespace Cards.API.Controllers
         [ActionName("GetCard")]
         public async Task<IActionResult> GetCard([FromRoute] Guid id)
         {
-            //var card = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
-            var card = await iCardRepository.GetOneCard(id);
+            var card = await iCardRepositoryData.GetOneCard(id);
             if (card != null)
             {
                 return Ok(card);
@@ -47,34 +53,29 @@ namespace Cards.API.Controllers
 
         // Add a Card
         [HttpPost]
-        public async Task<IActionResult> AddCard([FromBody] CardDto card)
+        public async Task<IActionResult> AddCard([FromBody] CardDto cardRequest)
         {
-            card.Id = Guid.NewGuid();
-            await cardsDbContext.Cards.AddAsync(card);
-            await cardsDbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCard), new { id = card.Id }, card);
+            var card = _mapper.Map<Card>(cardRequest);
+            var newlyAddedCard = await iCardRepositoryData.AddOneCard(card); 
+            if (newlyAddedCard != null)
+            {
+                return Ok(newlyAddedCard);
+            }
+            return BadRequest(); 
         }
 
         // Updating A Card
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task <IActionResult> UpdateCard([FromRoute] Guid id, [FromBody] CardDto card)
+        public async Task <IActionResult> UpdateCard([FromRoute] Guid id, CardDto updateCardRequest)
         {
-            var existingCard = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
-            if (existingCard != null)
+            var card = _mapper.Map<Card>(updateCardRequest);
+            var existingCard = await iCardRepositoryData.UpdateOneCard(id, card);
+            if(existingCard != null)
             {
-                existingCard.CardholderName = card.CardholderName;
-                existingCard.CardNumber = card.CardNumber;
-                existingCard.ExpiryMonth = card.ExpiryMonth;
-                existingCard.ExpiryYear = card.ExpiryYear;
-                existingCard.CVC =  card.CVC;
-                await cardsDbContext.SaveChangesAsync();
-                return Ok(existingCard);
+                return Ok(updateCardRequest);
             }
-            else
-            {
-                return NotFound("Card not found");
-            }
+            return BadRequest();
         }
 
         // Delete A Card
@@ -82,16 +83,16 @@ namespace Cards.API.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> DeleteCard([FromRoute] Guid id)
         {
-            var existingCard = await cardsDbContext.Cards.FirstOrDefaultAsync(x => x.Id == id);
-            if (existingCard != null)
+            var existingCard = await iCardRepositoryData.DeleteOneCard(id);
+
+            if (existingCard == null)
             {
-                cardsDbContext.Remove(existingCard);
-                await cardsDbContext.SaveChangesAsync();
-                return Ok(existingCard);
+                return NotFound();
             }
-            else
-            { return NotFound("Card not found");
-            }
+            return Ok();
+
+
+
         }
 
 

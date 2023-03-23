@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cards.API.DTOdomainModel;
+using Cards.API.DTO_domainModels;
 using Cards.API.Models;
 
 namespace Cards.API.HelperProfiles
@@ -8,7 +8,7 @@ namespace Cards.API.HelperProfiles
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Card, CardDto>();
+            CreateMap<Card, CardDto>().ReverseMap();
         }
     }
 }
