@@ -29,12 +29,12 @@
           <div>
             <label for="">Expiry Month</label>
             <input required type="text" name="expiryMonth" #expiryMonth=ngModel [(ngModel)]="card.expiryMonth" pattern="^(0?[1-9]|1[012])$" maxlength="2">
-            <div *ngIf="expiryMonth.invalid && expiryMonth.touched" class="error">Month is not valid</div>
+            <div *ngIf="expiryMonth.invalid && expiryMonth.touched" class="error"> Expiry Month is not valid</div>
           </div>
           <div>
             <label for="">Expiry Year</label>
             <input required type="text" name="expiryYear" #expiryYear=ngModel [(ngModel)]="card.expiryYear" pattern="^\d\d$" maxlength="2" >
-            <div *ngIf="expiryYear.invalid && expiryYear.touched" class="error">Year is not valid</div>
+            <div *ngIf="expiryYear.invalid && expiryYear.touched" class="error">Expiry Year is not valid</div>
           </div>
         </div>
 
