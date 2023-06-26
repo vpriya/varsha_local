@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cards.API", "Cards.API\Cards.API.csproj", "{FAD79829-66D1-4E24-831E-5CCD7E45995B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cards.API", "Cards.API\Cards.API.csproj", "{FAD79829-66D1-4E24-831E-5CCD7E45995B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstMSTestProject", "FirstMSTest\FirstMSTestProject.csproj", "{4F987901-0E05-4FBD-8BD3-2FC37CF5B8FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestsCard", "NUnitTestProject1\NUnitTestsCard.csproj", "{FE9EC712-7DAC-4D45-8834-E29AFA8A9ED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FAD79829-66D1-4E24-831E-5CCD7E45995B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAD79829-66D1-4E24-831E-5CCD7E45995B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAD79829-66D1-4E24-831E-5CCD7E45995B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F987901-0E05-4FBD-8BD3-2FC37CF5B8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F987901-0E05-4FBD-8BD3-2FC37CF5B8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F987901-0E05-4FBD-8BD3-2FC37CF5B8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F987901-0E05-4FBD-8BD3-2FC37CF5B8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE9EC712-7DAC-4D45-8834-E29AFA8A9ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE9EC712-7DAC-4D45-8834-E29AFA8A9ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE9EC712-7DAC-4D45-8834-E29AFA8A9ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE9EC712-7DAC-4D45-8834-E29AFA8A9ED9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
