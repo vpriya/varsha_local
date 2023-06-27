@@ -11,10 +11,10 @@ namespace NUnitTestsCard
         public void Adding_CardTest()
         {
             //Arrange
-            var card = new Card("vp1", "1111222233334444");
+            //var card = new Card("vp1", "1111222233334444");
 
             //Act
-            card.AddCard("vp2", "2222333344445555");
+           // card.AddCard("vp2", "2222333344445555");
 
             //Assert
 

@@ -18,7 +18,7 @@ namespace FirstMSTestProject
         {
             var card = new Card
             {
-               // Id = "d8ee618d-2955-419b-accc-a31195ebe884",
+               Id = new Guid ("d8ee618d-2955-419b-accc-a31195ebe884"),
                 CardholderName="Amit Kumar",
                 CardNumber="1111222233334444",
                 ExpiryMonth=03,
@@ -27,8 +27,19 @@ namespace FirstMSTestProject
             };
             var cardRepository = new Mock<ICardRepository>();
             cardRepository.Setup(c => c.GetCardById(It.IsAny<int>()))guid.Id = card.Id;)).Returns(card);
-        }
 
+            //var searchcard = await _iCardRepositoryData.GetOneCard(id);
+            //if (searchcard != null)
+            //{
+            //    return Ok(_mapper.Map<CardDto>(searchcard));
+            //}
+            //else
+            //{
+            //    return NotFound("Card not found");
+            //}
+
+        }
+        //----------------------------------------------------------------------
 
         [TestMethod]
         public void TestGetSum()
@@ -60,6 +71,23 @@ namespace FirstMSTestProject
             return fullName;
 
         }
+        //-------------------------------------------------------
+
+        private List<Card> SeedDatabase()
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+
+        //
 
     }
 }
