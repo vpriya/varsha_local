@@ -4,11 +4,6 @@ namespace Cards.API.Models
 {
     public class Card
     {
-        public Card(char name, char number)
-        {
-            V1 = name;
-            V2 = number;
-        }
 
         [Key]
         public Guid Id { get; set; }
@@ -17,7 +12,6 @@ namespace Cards.API.Models
         public int ExpiryMonth { get; set; }
         public int ExpiryYear { get; set; }
         public int CVC { get; set; }
-        public char V1 { get; }
-        public char V2 { get; }
+
     }
 }
