@@ -12,6 +12,5 @@ namespace Cards.API.CardsRepository
         Task<CardDto> AddOneCard(CardDto card);
         Task <Boolean> DeleteOneCard(Guid id);
         Task<CardDto?> UpdateOneCard(Guid id, CardDto card);
-
     }
 }
