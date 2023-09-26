@@ -56,26 +56,6 @@ namespace NUnitTestsCard
         }
 
         [Test]
-        public async Task GetCards_Success()
-        {
-            Guid id = new Guid("e7aca2fb-7421-4258-8714-7f9a684b30e4");//Amit 1st and dipika 2nd 
-            var cards = await dbContext.Cards.ToListAsync();
-            Assert.AreEqual(cards.Count,2);
-            Assert.AreEqual(cards[1].Id, id);
-            Assert.AreEqual(cards[0].CardNumber, "1111222233334444");// right side amit card
-        }
-
-        [Test]
-        public async Task GetCards_Failure()
-        {
-            Guid id = new Guid("e7aca2fb-7421-4258-8714-7f9a684b30e4");//Amit 1st and dipika 2nd
-            var cards = await dbContext.Cards.ToListAsync();
-            Assert.AreNotEqual(cards.Count, 10);
-            Assert.AreNotEqual(cards[0].Id, id);
-            Assert.AreNotEqual(cards[1].CardNumber, "1111222233334444");//right is amit card
-        }
-
-        [Test]
         public async Task AddOneCard_Success()
         {
             Guid id = new Guid("f555b4c3-8b1c-4e2a-9929-7c1b47e16250"); //generated from online GUID generator
@@ -100,13 +80,31 @@ namespace NUnitTestsCard
             {
                 Assert.AreEqual("Papa Johns", oneCard.CardholderName);
                 Assert.AreEqual("1010202030304050", oneCard.CardNumber);
+                //
+                dbContext.Cards.Remove(oneCard); // deleting whatever we added after test passes
+                await dbContext.SaveChangesAsync();
+                //
             }
+
         }
 
         [Test]
         public async Task DeleteOneCard_Success()
         {
-            Guid id = new Guid("f555b4c3-8b1c-4e2a-9929-7c1b47e16250"); // using the same added card from the Addtest
+            // first add a record to delete the same here
+            Guid id = new Guid("f555b4c3-8b1c-4e2a-9929-7c1b47e16250"); //generated from online GUID generator
+            Card newCard = new Card()
+            {
+                Id = id,
+                CardholderName = "Papa Johns",
+                CardNumber = "1010202030304050",
+                ExpiryMonth = 05,
+                ExpiryYear = 30,
+                CVC = 019
+            };
+            await dbContext.Cards.AddAsync(newCard);
+            await dbContext.SaveChangesAsync(); 
+            // record is added now to be deleted
 
             //
             var existingCard = await dbContext.Cards.FirstOrDefaultAsync(x => x.Id == id) ?? new Card();
@@ -214,6 +212,26 @@ namespace NUnitTestsCard
             Guid id = new Guid(); // not existing id
             var deletedCard = await dbContext.Cards.FirstOrDefaultAsync(x => x.Id == id) ?? null;
             Assert.IsNull(deletedCard);
+        }
+
+        [Test]
+        public async Task GetCards_Success()
+        {
+            Guid id = new Guid("e7aca2fb-7421-4258-8714-7f9a684b30e4");//Amit 1st and dipika 2nd 
+            var cards = await dbContext.Cards.ToListAsync();
+            Assert.AreEqual(cards.Count, 2);
+            Assert.AreEqual(cards[1].Id, id);
+            Assert.AreEqual(cards[0].CardNumber, "1111222233334444");// right side amit card
+        }
+
+        [Test]
+        public async Task GetCards_Failure()
+        {
+            Guid id = new Guid("e7aca2fb-7421-4258-8714-7f9a684b30e4");//Amit 1st and dipika 2nd
+            var cards = await dbContext.Cards.ToListAsync();
+            Assert.AreNotEqual(cards.Count, 10);
+            Assert.AreNotEqual(cards[0].Id, id);
+            Assert.AreNotEqual(cards[1].CardNumber, "1111222233334444");//right is amit card
         }
 
 
