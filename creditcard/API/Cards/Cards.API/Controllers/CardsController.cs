@@ -82,7 +82,7 @@ namespace Cards.API.Controllers
             var ifDeleted= await _iCardRepositoryData.DeleteOneCard(id);
             if (ifDeleted)
             {
-                 return Ok();
+                 return NoContent();
             }
             return NotFound("Card not found");
         }
