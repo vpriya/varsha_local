@@ -35,6 +35,7 @@ namespace Cards.API.Controllers
 
         // Get single Card
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:guid}")]
         [ActionName("GetCard")]
         public async Task<IActionResult> GetCard([FromRoute] Guid id)
@@ -46,20 +47,25 @@ namespace Cards.API.Controllers
             }
             else
             {
-                return NotFound("Card not found");
+               // return NotFound("Card not found");
+                return NotFound();
             }
         }
 
         // Add a Card - Post the data is JSON format
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         public async Task<IActionResult> AddCard([FromBody] CardDto cardToAddDto)
         {
             var newlyAddedCard = await _iCardRepositoryData.AddOneCard(cardToAddDto);
             if (newlyAddedCard != null)
             {
-                return Ok(cardToAddDto);
+                //return Ok(cardToAddDto);
+                return CreatedAtAction(nameof(AddCard), new { id = newlyAddedCard.Id }, newlyAddedCard);
             }
-            return BadRequest();
+           return BadRequest();
         }
 
         // Updating A Card

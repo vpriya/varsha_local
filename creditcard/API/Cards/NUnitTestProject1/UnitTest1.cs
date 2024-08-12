@@ -18,7 +18,6 @@ namespace NUnitTestsCard
 
 
         CardsDbContext dbContext;
-        sqlCardRepository cardRepository;
 
         public static DbContextOptions<CardsDbContext> DbContextOptions { get => dbContextOptions; set => dbContextOptions = value; }
 
@@ -28,7 +27,6 @@ namespace NUnitTestsCard
             dbContext = new CardsDbContext(dbContextOptions);
             dbContext.Database.EnsureCreated();
             SeedDatabase();
-            cardRepository = new sqlCardRepository(dbContext, _mapper);
         }
 
         [Test]
