@@ -5,6 +5,7 @@ using Cards.API.DTOdomainModel;
 using Cards.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Cards.API.Controllers
 {
@@ -34,6 +35,7 @@ namespace Cards.API.Controllers
 
         // Get single Card
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("{id:guid}")]
         [ActionName("GetCard")]
         public async Task<IActionResult> GetCard([FromRoute] Guid id)
@@ -45,36 +47,67 @@ namespace Cards.API.Controllers
             }
             else
             {
-                return NotFound("Card not found");
+               // return NotFound("Card not found");
+                return NotFound();
             }
         }
 
         // Add a Card - Post the data is JSON format
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
         public async Task<IActionResult> AddCard([FromBody] CardDto cardToAddDto)
         {
             var newlyAddedCard = await _iCardRepositoryData.AddOneCard(cardToAddDto);
             if (newlyAddedCard != null)
             {
-                return Ok(cardToAddDto);
+                //return Ok(cardToAddDto);
+                return CreatedAtAction(nameof(AddCard), new { id = newlyAddedCard.Id }, newlyAddedCard);
             }
-            return BadRequest();
+           return BadRequest();
         }
 
         // Updating A Card
+        // PUT: api/Cards/id
         [HttpPut]
         [Route("{id:guid}")]
         public async Task <IActionResult> UpdateCard([FromRoute] Guid id, [FromBody] CardDto cardToUpdateDTo)
         {
-           var ChangedCard = await _iCardRepositoryData.UpdateOneCard(id, cardToUpdateDTo);
+           /*var ChangedCard = await _iCardRepositoryData.UpdateOneCard(id, cardToUpdateDTo);
             if (ChangedCard != null)
             {
                 return  Ok(cardToUpdateDTo);
             }
-            return NotFound("Card not found");
+            return NotFound("Card not found");*/
+
+
+            try
+            {
+                await _iCardRepositoryData.UpdateOneCard(id, cardToUpdateDTo);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                var ChangedCard2 = await _iCardRepositoryData.UpdateOneCard(id, cardToUpdateDTo);
+                if (ChangedCard2 == null)
+                {
+                    return NotFound("Card not found");
+                }
+                else
+                {
+                    throw;
+                }
+
+            }
+            return Ok(cardToUpdateDTo);
+            //return NoContent();
+
+
+
         }
 
         // Delete A Card
+        // DELETE: api/Cards/id
         [HttpDelete]
         [Route("{id:guid}")]
         public async Task<IActionResult> DeleteCard([FromRoute] Guid id)

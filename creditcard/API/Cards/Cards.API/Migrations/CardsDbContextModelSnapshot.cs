@@ -28,22 +28,23 @@ namespace Cards.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("CVC")
-                        .HasColumnType("integer");
+                    b.Property<string>("CVC")
+                        .IsRequired()
+                        .HasColumnType("varchar(3)");
 
                     b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(16)");
 
                     b.Property<string>("CardholderName")
+                        .HasColumnType("varchar(60)");
+
+                    b.Property<string>("ExpiryMonth")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(2)");
 
-                    b.Property<int>("ExpiryMonth")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ExpiryYear")
-                        .HasColumnType("integer");
+                    b.Property<string>("ExpiryYear")
+                        .IsRequired()
+                        .HasColumnType("varchar(2)");
 
                     b.HasKey("Id");
 

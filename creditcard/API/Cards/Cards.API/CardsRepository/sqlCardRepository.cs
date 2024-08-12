@@ -35,6 +35,16 @@ namespace Cards.API.CardsRepository
         {
             addRequestedCard.Id = Guid.NewGuid();
             var card_toAdd = _mapper.Map<Card>(addRequestedCard); // now the Card is the destination and CardDto is the source
+            var cardList = await _cardsDbContext.Cards.ToListAsync();
+            for (var i = 0;i< cardList.Count;i++)
+            {
+                if (card_toAdd.CardNumber == cardList[i].CardNumber)
+                {
+                    return null;
+                }
+            }
+            
+            
             await _cardsDbContext.Cards.AddAsync(card_toAdd);
             await _cardsDbContext.SaveChangesAsync();
             return addRequestedCard; 
